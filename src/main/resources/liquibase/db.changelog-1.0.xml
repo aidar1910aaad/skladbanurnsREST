@@ -1,0 +1,222 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.4.xsd">
+
+
+
+
+    <changeSet id="1.0.0" author="skladbanurns">
+        <createTable tableName="users">
+
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="username" type="TEXT">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="first_name" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+
+
+            <column name="created" type="TIMESTAMP" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="TIMESTAMP" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="VARCHAR(25)" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="1.0.1" author="skladbanurns">
+        <createTable tableName="roles">
+            <column name="id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="name" type="TEXT">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="created" type="TIMESTAMP" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated" type="TIMESTAMP" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="status" type="VARCHAR(25)" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.2" author="skladbanurns">
+        <createTable tableName="user_roles">
+            <column name="user_id" type="BIGINT">
+            </column>
+
+            <column name="role_id" type="BIGINT">
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="1.0.3" author="skladbanurns">
+        <addForeignKeyConstraint baseColumnNames="user_id"
+                                 baseTableName="user_roles"
+                                 constraintName="fk_user_roles_user"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+
+    <changeSet id="1.0.4" author="skladbanurns">
+        <addForeignKeyConstraint baseColumnNames="role_id"
+                                 baseTableName="user_roles"
+                                 constraintName="fk_user_roles_roles"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="roles"/>
+    </changeSet>
+
+
+    <changeSet id="1.0.5" author="skladbanurns">
+        <insert tableName="roles">
+            <column name = "name" value="ROLE_SALESMANAGER"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="ROLE_ADMIN"/>
+        </insert>
+        <insert tableName="roles">
+            <column name="name" value="ROLE_REQUESTMANAGER"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="1.0.6" author="skladbanurns">
+        <createTable tableName="requests">
+            <column name = "id" type="SERIAL">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name = "flavors" type="text" ></column>
+            <column name = "miscs" type="text" ></column>
+            <column name = "storeid" type="bigint" >
+                <constraints nullable="false"/>
+            </column>
+            <column name = "creationuserid" type="BIGINT">
+            </column>
+            <column name = "description" type="TEXT">
+            </column>
+            <column name="created" type="TIMESTAMP" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated" type="TIMESTAMP" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="status" type="VARCHAR(25)" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="1.0.7" author="skladbanurns">
+        <addForeignKeyConstraint baseColumnNames="creationuserid"
+                                 baseTableName="requests"
+                                 constraintName="fk_user_requests"
+                                 onDelete="CASCADE"
+                                 onUpdate="RESTRICT"
+                                 referencedColumnNames="id"
+                                 referencedTableName="users"/>
+    </changeSet>
+
+
+    <changeSet id="1.0.8" author="skladbanurns">
+        <createTable tableName="flavors">
+            <column name = "id" type="BIGSERIAL">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name = "name" type="TEXT"></column>
+            <column name = "description" type="TEXT"></column>
+            <column name = "quantity" type="bigint"></column>
+            <column name = "barcode" type="text"></column>
+            <column name="created" type="TIMESTAMP" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="updated" type="TIMESTAMP" defaultValue="now()">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="status" type="VARCHAR(25)" defaultValue="ACTIVE">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+<changeSet id="1.0.9" author="skladbanurns">
+    <createTable tableName="miscellaneous">
+    <column name = "id" type="BIGSERIAL">
+        <constraints primaryKey="true" nullable="false" />
+    </column>
+    <column name = "name" type="TEXT"></column>
+    <column name = "description" type="TEXT"></column>
+        <column name = "barcode" type="text"></column>
+        <column name = "quantity" type="bigint"></column>
+    <column name="created" type="TIMESTAMP" defaultValue="now()">
+        <constraints nullable="false"/>
+    </column>
+
+    <column name="updated" type="TIMESTAMP" defaultValue="now()">
+        <constraints nullable="false"/>
+    </column>
+
+    <column name="status" type="VARCHAR(25)" defaultValue="ACTIVE">
+        <constraints nullable="false"/>
+    </column>
+</createTable>
+</changeSet>
+
+<changeSet id="1.1.0" author="skladbanurns">
+    <createTable tableName="stores">
+        <column name="id" type="BIGSERIAL">
+            <constraints primaryKey="true" nullable="false"/>
+        </column>
+        <column name="name" type= "text">
+        </column>
+        <column name="created" type="TIMESTAMP" defaultValue="now()">
+            <constraints nullable="false"/>
+        </column>
+
+        <column name="updated" type="TIMESTAMP" defaultValue="now()">
+            <constraints nullable="false"/>
+        </column>
+
+        <column name="status" type="VARCHAR(25)" defaultValue="ACTIVE">
+        <constraints nullable="false"/>
+        </column>
+</createTable>
+    <addForeignKeyConstraint baseTableName="requests" baseColumnNames="storeid" constraintName="fk_stores_request" referencedTableName="stores"
+                             referencedColumnNames="id" onUpdate="RESTRICT" onDelete="CASCADE"/>
+</changeSet>
+
+
+</databaseChangeLog>
